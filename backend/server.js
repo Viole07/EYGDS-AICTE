@@ -2,26 +2,26 @@ const express = require('express');
 const mongoose = require('mongoose');
 require('dotenv').config();
 const User = require('./models/User');
-const bcrypt = require('bcryptjs'); // ✅ Fix here
+const bcrypt = require('bcryptjs');
 
-const app = express(); // ✅ Fix: Initialize app first
-app.use(express.json()); // ✅ Fix: Move this below app initialization
+const app = express();
+app.use(express.json());
 
 const PORT = 5000;
 
-// MongoDB Connection
+
 mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log("Connected to MongoDB")) // ✅ Fix here: use arrow function inside .then()
+    .then(() => console.log("Connected to MongoDB"))
     .catch((err) => console.log(err));
 
-// Home Page API
+
 app.get('/', (req, res) => {
-    res.send("<h1>Welcome to the MERN stack week 2 session</h1>"); // ✅ Fix here
+    res.send("<h1>Welcome to the MERN stack week 2 session</h1>");
 });
 
-// Register User API
+
 app.post('/register', async (req, res) => {
-    const { username, email, password } = req.body; // ✅ Fix: `name` -> `username`
+    const { username, email, password } = req.body;
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = new User({ username, email, password: hashedPassword });
@@ -29,7 +29,7 @@ app.post('/register', async (req, res) => {
         res.json({ message: "User Registered" });
     } catch (err) {
         console.log(err);
-        res.status(500).json({ error: "Internal Server Error" }); // ✅ Send error response
+        res.status(500).json({ error: "Internal Server Error" });
     }
 });
 
@@ -49,7 +49,6 @@ app.post('/login', async (req, res) => {
 
 
 
-// Start Server
 app.listen(PORT, (err) => {
     if (err) {
         console.log(err);
