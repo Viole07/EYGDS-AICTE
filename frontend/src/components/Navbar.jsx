@@ -1,7 +1,15 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-const Navbar = () => {
+const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("username"); // Clear the username from localStorage
+    setIsLoggedIn(false); // Update the logged-in state
+    navigate('/'); // Redirect to the landing page
+  };
+
   return (
     <div>
       <nav className="navbar navbar-expand-lg">
@@ -37,12 +45,20 @@ const Navbar = () => {
               </li>
             </ul>
             <ul className="navbar-nav ms-auto">
-              <li className="nav-item">
-                <Link className="nav-link active text-white" to="login">Login</Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link active text-white" to="register">Register</Link>
-              </li>
+              {isLoggedIn ? (
+                <li className="nav-item">
+                  <button className="nav-link active text-white" onClick={handleLogout}>Logout</button>
+                </li>
+              ) : (
+                <>
+                  <li className="nav-item">
+                    <Link className="nav-link active text-white" to="login">Login</Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link className="nav-link active text-white" to="register">Register</Link>
+                  </li>
+                </>
+              )}
             </ul>
           </div>
         </div>
